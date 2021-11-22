@@ -94,7 +94,7 @@ def show_reports(raport):
     if r4[0] != -1:
         print("Prinmele 3 evenimente cu cele mai multei participanti sunt :")
         for el in r4:
-            print(el)
+            print(el , len(el.lista_persoane))
     else:
         print("Nu exista 3 evenimente")
     
