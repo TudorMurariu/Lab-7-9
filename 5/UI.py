@@ -91,7 +91,7 @@ def show_reports(raport):
     for el in r3:
         print(el.descriere , len(el.lista_persoane))
     
-    if len(r4) != 3:
+    if r4[0] != -1:
         print("Prinmele 3 evenimente cu cele mai multei participanti sunt :")
         for el in r4:
             print(el)
@@ -194,10 +194,11 @@ class Console:
                     print("Specificati daca trebuie afisata lista de evenimente sau cea de persoane.")
 
             elif args[0] == "inscrie":
-                nume_ID_persoana,ID_eveniment = desparete_eveniment_persoana(args, self.validator) 
-                nume_ID_persoana = nume_ID_persoana[0]
+                nume_ID_persoana,ID_eveniment = desparete_eveniment_persoana(args, self.validator)               
+
                 ID_eveniment = ID_eveniment[0]
-                #print(nume_ID_persoana,ID_eveniment)
+                nume_ID_persoana = nume_ID_persoana[0]
+
                 if (nume_ID_persoana,ID_eveniment) == ("-1","-1"):
                     continue
                 if not self.validator.isID(ID_eveniment):
