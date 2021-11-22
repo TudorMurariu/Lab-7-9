@@ -71,6 +71,7 @@ def show_reports(raport):
     r1 = raport.evenimente_cu_o_singura_persoana()
     r2 = raport.persoanele_cu_cele_mai_multe_evenimente()
     r3 = raport.primele_evenimente_cu_cei_mai_multi_participanti()
+    r4 = raport.top_cele_3_evenimente()
 
     # raport 1 
     if r1 == []:
@@ -89,6 +90,13 @@ def show_reports(raport):
     print("Primele 20 de procente de evenimente cu cei mai mulți participanți (descriere, număr participanți)")
     for el in r3:
         print(el.descriere , len(el.lista_persoane))
+    
+    if len(r4) != 3:
+        print("Prinmele 3 evenimente cu cele mai multei participanti sunt :")
+        for el in r4:
+            print(el)
+    else:
+        print("Nu exista 3 evenimente")
     
 
 class Console:

@@ -46,6 +46,15 @@ class rapoarte:
         lista_raspuns.sort(key=numar_persoane,reverse=True)
         return lista_raspuns[0:numar_evenimente] # <= 20% 
 
+    def top_cele_3_evenimente(self):
+        try:
+            lista_raspuns = self.lista_evenimente[:]
+            lista_raspuns.sort(key=numar_persoane,reverse=True)
+            print(len(lista_raspuns[0:3]))
+            return lista_raspuns[0:3] # primele 3
+        except:
+            return [-1]
+
 def test_evenimente_cu_o_singura_persoana():
 
     #repo_persoane1 = persoane_repository()
