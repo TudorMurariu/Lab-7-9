@@ -7,6 +7,8 @@ from evenimente import evenimente
 from repo_evenimente import eveniment_repository
 from repo_persoane import persoane_repository
 from Reports import rapoarte
+from inscrieri import inscrieri
+from inscrieri_textfiles import inscrieri_textfiles
 
 lista_persoane = []
 lista_evenimente = []
@@ -17,7 +19,11 @@ if __name__ == '__main__':
     evenimente_service1 = evenimente_service(valid)
     repo_persoane1 = persoane_repository()
     repo_evenimente1 = eveniment_repository()
-    raport1 = rapoarte(lista_persoane, lista_evenimente)
+
+    inscrieri1 = inscrieri()
+    #inscrieri1 = inscrieri_textfiles()
+    raport1 = rapoarte(lista_persoane, lista_evenimente, inscrieri1)
+    console = UI.Console(lista_persoane, lista_evenimente, persoane_service1,
+     evenimente_service1, repo_persoane1, repo_evenimente1, inscrieri1, raport1, valid)
     
-    console = UI.Console(lista_persoane, lista_evenimente, persoane_service1, evenimente_service1, repo_persoane1, repo_evenimente1, raport1, valid)
     console.Interfata()

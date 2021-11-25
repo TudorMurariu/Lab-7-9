@@ -67,40 +67,9 @@ def desparete_eveniment_persoana(args, valid):
     eveniment_ID = args[i+1:]
     return [persoana_nume_ID, eveniment_ID]
 
-def show_reports(raport):
-    r1 = raport.evenimente_cu_o_singura_persoana()
-    r2 = raport.persoanele_cu_cele_mai_multe_evenimente()
-    r3 = raport.primele_evenimente_cu_cei_mai_multi_participanti()
-    r4 = raport.top_cele_3_evenimente()
-
-    # raport 1 
-    if r1 == []:
-        print("Nu exista evenimente la care participa o singura persoana.")
-    else : 
-        print("Lista de evenimente la care participă o persoană ordonat alfabetic după descriere, după dată :")
-        for el in r1:
-            print(el)
-    
-    print("Persoane participante la cele mai multe evenimente :")
-    for el in r2:
-        print(el)
-    num = len(r2[0].lista_evenimente)
-    print(f"Numarul de evenimente este la care participa acestia este: {num} \n")
-
-    print("Primele 20 de procente de evenimente cu cei mai mulți participanți (descriere, număr participanți)")
-    for el in r3:
-        print(el.descriere , len(el.lista_persoane))
-    
-    if r4[0] != -1:
-        print("Prinmele 3 evenimente cu cele mai multei participanti sunt :")
-        for el in r4:
-            print(el , len(el.lista_persoane))
-    else:
-        print("Nu exista 3 evenimente")
-    
-
 class Console:
-    def __init__(self, lista_persoane, lista_evenimente, service_persoane, service_evenimente, repo_persoane, repo_evenimente, raport, validator):
+    def __init__(self, lista_persoane, lista_evenimente, service_persoane, 
+    service_evenimente, repo_persoane, repo_evenimente, inscrieri, raport, validator):
         self.lista_persoane = lista_persoane
         self.lista_evenimente = lista_evenimente
         self.service_persoane = service_persoane
@@ -108,6 +77,7 @@ class Console:
         self.repo_persoane = repo_persoane
         self.repo_evenimente = repo_evenimente
         self.validator = validator
+        self.inscrieri = inscrieri
         self.raport = raport
 
     def populate(self):
@@ -126,18 +96,51 @@ class Console:
         p5 = persoane("13","Stefan Paslaru"," umbrei 17")
         self.service_persoane.adauga_persoane(p5,self.lista_persoane)
 
-        e1 = evenimente("7","11.01.2022","11:33","descriere")
+        e1 = evenimente("7","11.01.2022","11:33","descriere1")
         self.service_evenimente.adauga_evenimente(e1, self.lista_evenimente)
-        e2 = evenimente("123246","01.11.2012","03:55","descriere")
+        e2 = evenimente("123246","01.11.2012","03:55","descriere2")
         self.service_evenimente.adauga_evenimente(e2, self.lista_evenimente)
-        e3 = evenimente("6767","30.01.2011","10:00","descriere")
+        e3 = evenimente("6767","30.01.2011","10:00","descriere3")
         self.service_evenimente.adauga_evenimente(e3, self.lista_evenimente)
-        e4 = evenimente("555","03.01.2020","09:30","descriere")
+        e4 = evenimente("555","03.01.2020","09:30","descriere4")
         self.service_evenimente.adauga_evenimente(e4, self.lista_evenimente)
-        e5 = evenimente("31","11.09.2022","12:15","descriere")
+        e5 = evenimente("31","11.09.2022","12:15","descriere5")
         self.service_evenimente.adauga_evenimente(e5, self.lista_evenimente)
 
         print("Populated event and person lists.")
+
+    def show_reports(self):
+        r1 = self.raport.evenimente_cu_o_singura_persoana()
+        r2 = self.raport.persoanele_cu_cele_mai_multe_evenimente()
+        r3 = self.raport.primele_evenimente_cu_cei_mai_multi_participanti()
+        r4 = self.raport.top_cele_3_evenimente()
+
+        # raport 1 
+        if r1 == []:
+            print("Nu exista evenimente la care participa o singura persoana.")
+        else : 
+            print("Lista de evenimente la care participă o persoană ordonat alfabetic după descriere, după dată :")
+            for el in r1:
+                print(el)
+        
+        print("Persoane participante la cele mai multe evenimente :")
+        for el in r2:
+            print(el)
+        num = len(self.inscrieri.getEvenimente(r2[0]))
+        print(f"Numarul de evenimente este la care participa acestia este: {num} \n")
+
+        print("Primele 20 de procente de evenimente cu cei mai mulți participanți (descriere, număr participanți)")
+        for el in r3:
+            print(el.descriere , len(self.inscrieri.getPersoane(el)))
+        
+        if r4[0] != -1:
+            print("Prinmele 3 evenimente cu cele mai multei participanti sunt :")
+            for el in r4:
+                print(el , len(self.inscrieri.getPersoane(el)))
+        else:
+            print("Nu exista 3 evenimente")
+
+    
 
     def Interfata(self):
         
@@ -185,11 +188,21 @@ class Console:
                 elif args[1] == "persoana":
                     persoanaCautata = self.repo_persoane.cauta_persoana(args, self.lista_persoane)
                     print_persoane([persoanaCautata])
-                    self.repo_persoane.print_lista_evenimente(persoanaCautata)
+                    #self.repo_persoane.print_lista_evenimente(persoanaCautata)
+                    lst = self.inscrieri.getEvenimente(persoanaCautata)
+                    if lst != None:
+                        print("Evenimentele la care participa :")
+                    for el in lst:
+                        print(el.getID())
                 elif args[1] == "evenimentul":
                     evenimentCautat = self.repo_evenimente.cauta_eveniment(args, self.lista_evenimente)
                     print_evenimente([evenimentCautat])
-                    self.repo_evenimente.print_lista_persoane(evenimentCautat)
+                    #self.repo_evenimente.print_lista_persoane(evenimentCautat)
+                    lst = self.inscrieri.getPersoane(evenimentCautat)
+                    if lst != None:
+                        print("Persoanele care participa :")
+                    for el in lst:
+                        print(el.getpersonID())
                 else:
                     print("Specificati daca trebuie afisata lista de evenimente sau cea de persoane.")
 
@@ -208,11 +221,12 @@ class Console:
                 evenimentCautat = self.repo_evenimente.cauta_eveniment(["", "",ID_eveniment], self.lista_evenimente)
                 if persoanaCautata == None or evenimentCautat == None:
                     continue
-                self.repo_persoane.add_eveniment(persoanaCautata, evenimentCautat)
-                self.repo_evenimente.add_persoana(evenimentCautat, persoanaCautata)
+                #self.repo_persoane.add_eveniment(persoanaCautata, evenimentCautat)
+                #self.repo_evenimente.add_persoana(evenimentCautat, persoanaCautata)
+                self.inscrieri.inscrie(persoanaCautata, evenimentCautat)
 
             elif command == "rapoarte" or args[0] == "rapoarte":
-                show_reports(self.raport)
+                self.show_reports()
 
             elif args[0] == "genereaza":
                 if len(args) == 1:
