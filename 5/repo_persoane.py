@@ -5,9 +5,6 @@ class persoane_repository:
     def __init__(self):
         pass
 
-    def number_events(self, person):
-        return len(person.lista_evenimente)
-    
     def cauta_persoana(self, args, lista_persoane):
         try:
             x = int(args[2])
@@ -26,14 +23,3 @@ class persoane_repository:
                     return lista_persoane[i]
 
             print("Nu exista o persoana cu acest nume.")
-
-    def add_eveniment(self, person, eveniment):
-        person.lista_evenimente.append(eveniment)
-
-    def print_lista_evenimente(self, person):
-        string = ""
-        for el in person.lista_evenimente:
-            string += el.ID + "  "
-        print("Evenimentele la care participa : ",string)
-            
-        

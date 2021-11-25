@@ -20,8 +20,8 @@ if __name__ == '__main__':
     repo_persoane1 = persoane_repository()
     repo_evenimente1 = eveniment_repository()
 
-    inscrieri1 = inscrieri()
-    #inscrieri1 = inscrieri_textfiles()
+    #inscrieri1 = inscrieri()
+    inscrieri1 = inscrieri_textfiles(lista_persoane, lista_evenimente, repo_persoane1, repo_evenimente1)
     raport1 = rapoarte(lista_persoane, lista_evenimente, inscrieri1)
     console = UI.Console(lista_persoane, lista_evenimente, persoane_service1,
      evenimente_service1, repo_persoane1, repo_evenimente1, inscrieri1, raport1, valid)

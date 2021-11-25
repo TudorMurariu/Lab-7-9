@@ -187,22 +187,26 @@ class Console:
                     print("Specificati ID-ul sau numele persoanei/evenimentului.")
                 elif args[1] == "persoana":
                     persoanaCautata = self.repo_persoane.cauta_persoana(args, self.lista_persoane)
+                    if persoanaCautata == None:
+                        continue
                     print_persoane([persoanaCautata])
-                    #self.repo_persoane.print_lista_evenimente(persoanaCautata)
+                    
                     lst = self.inscrieri.getEvenimente(persoanaCautata)
                     if lst != None:
                         print("Evenimentele la care participa :")
                     for el in lst:
-                        print(el.getID())
+                        print(el.get_ID())
                 elif args[1] == "evenimentul":
                     evenimentCautat = self.repo_evenimente.cauta_eveniment(args, self.lista_evenimente)
+                    if evenimentCautat == None:
+                        continue
                     print_evenimente([evenimentCautat])
-                    #self.repo_evenimente.print_lista_persoane(evenimentCautat)
+                    
                     lst = self.inscrieri.getPersoane(evenimentCautat)
                     if lst != None:
                         print("Persoanele care participa :")
                     for el in lst:
-                        print(el.getpersonID())
+                        print(el.get_personID())
                 else:
                     print("Specificati daca trebuie afisata lista de evenimente sau cea de persoane.")
 
