@@ -1,14 +1,6 @@
-from Reports import rapoarte
-from Validators import Validator
 from persoane import persoane
 from evenimente import evenimente
-from evenimente_service import evenimente_service
-from persoane_service import persoane_service
-from repo_persoane import persoane_repository
-from repo_evenimente import eveniment_repository
-from Validators import Validator
 from Reports import rapoarte
-import random
 
 def get_command():
         txt = input("Introdu o comanda :\n")
@@ -40,12 +32,19 @@ def print_persoane(lista_persoane):
     except:
         print("Lista este vida.")
         
+def get_string_from_list(lista_evenimente): # functie recursiva
+    '''
+        Daca lista este goala functia returneaza un string vid
+        Altfel returnneaza un tring format din primul element 
+        + apelul functiei cu lista formata din lista actuala fara primul element
+    '''
+    if len(lista_evenimente) > 0:
+        return str(lista_evenimente[0]) + '\n' + get_string_from_list(lista_evenimente[1:])
+    return '' 
 
 def print_evenimente(lista_evenimente):
     try:
-        string = ""
-        for el in lista_evenimente:
-            string += str(el) + " \n"
+        string = get_string_from_list(lista_evenimente)
         if string[-1] == '\n':
             string = string[0:-1] # fara ultimul element
         print(string)
@@ -82,7 +81,7 @@ class Console:
 
     def populate(self):
         '''
-        Populeaza lista cu niste valori initiale
+            Populeaza lista cu niste valori initiale
         '''
 
         p1 = persoane("123","Andrei Alexandru"," corbului 11")
@@ -110,36 +109,38 @@ class Console:
         print("Populated event and person lists.")
 
     def show_reports(self):
-        r1 = self.raport.evenimente_cu_o_singura_persoana()
-        r2 = self.raport.persoanele_cu_cele_mai_multe_evenimente()
-        r3 = self.raport.primele_evenimente_cu_cei_mai_multi_participanti()
-        r4 = self.raport.top_cele_3_evenimente()
+        try:
+            r1 = self.raport.evenimente_cu_o_singura_persoana()
+            r2 = self.raport.persoanele_cu_cele_mai_multe_evenimente()
+            r3 = self.raport.primele_evenimente_cu_cei_mai_multi_participanti()
+            r4 = self.raport.top_cele_3_evenimente()
 
-        # raport 1 
-        if r1 == []:
-            print("Nu exista evenimente la care participa o singura persoana.")
-        else : 
-            print("Lista de evenimente la care participă o persoană ordonat alfabetic după descriere, după dată :")
-            for el in r1:
+            # raport 1 
+            if r1 == []:
+                print("Nu exista evenimente la care participa o singura persoana.")
+            else : 
+                print("Lista de evenimente la care participă o persoană ordonat alfabetic după descriere, după dată :")
+                for el in r1:
+                    print(el)
+            
+            print("Persoane participante la cele mai multe evenimente :")
+            for el in r2:
                 print(el)
-        
-        print("Persoane participante la cele mai multe evenimente :")
-        for el in r2:
-            print(el)
-        num = len(self.inscrieri.getEvenimente(r2[0]))
-        print(f"Numarul de evenimente este la care participa acestia este: {num} \n")
+            num = len(self.inscrieri.getEvenimente(r2[0]))
+            print(f"Numarul de evenimente este la care participa acestia este: {num} \n")
 
-        print("Primele 20 de procente de evenimente cu cei mai mulți participanți (descriere, număr participanți)")
-        for el in r3:
-            print(el.descriere , len(self.inscrieri.getPersoane(el)))
-        
-        if r4[0] != -1:
-            print("Prinmele 3 evenimente cu cele mai multei participanti sunt :")
-            for el in r4:
-                print(el , len(self.inscrieri.getPersoane(el)))
-        else:
-            print("Nu exista 3 evenimente")
-
+            print("Primele 20 de procente de evenimente cu cei mai mulți participanți (descriere, număr participanți)")
+            for el in r3:
+                print(el.descriere , len(self.inscrieri.getPersoane(el)))
+            
+            if r4[0] != -1:
+                print("Prinmele 3 evenimente cu cele mai multei participanti sunt :")
+                for el in r4:
+                    print(el , len(self.inscrieri.getPersoane(el)))
+            else:
+                print("Nu exista 3 evenimente")
+        except:
+            print("Nu exista rapoarte")
     
 
     def Interfata(self):

@@ -66,13 +66,19 @@ class persoane_service:
                     return
             print("Nu exista o persoana cu acest nume.")
  
-    def get_new_person(self, istest=False): # o functie recursiva
+    def get_new_person(self): # o functie recursiva
+        '''
+            Functia primeste o persoana de la utilizator,
+            verifica daca datele persoanei sunt corecte:
+                Daca sunt corecte returneaza persoana
+                Altfel afiseaza un mesaj de eroare si se apeleaza din nou
+        '''
         new_person = UI.read_person()
         if not self.validator.verifica_ID_p(new_person.get_personID()):
-            if not istest:
-                print("ID incorect !\nIncearca din nou : ")
+            print("ID incorect !\nIncearca din nou : ")
             new_person = self.get_new_person()
         return new_person
+
 
     def modifica_persoane(self, args, lista_persoane):
         try:
@@ -122,40 +128,3 @@ class persoane_service:
 
         return persoane(personID, nume, adresa)
 
-def test_adauga_persoane():
-        valid = Validator([],[]) 
-        service = persoane_service(valid)
-        p1 = persoane("1352","Andrei","Corbului 13")
-        p2 = persoane("552","Matei","Fabricii 9")
-        p3 = persoane("789","Andrei","Cuza 14")
-        new_p = persoane("555","Maria","Cluj?")
-        l1 = [p1,p2,p3]
-        service.adauga_persoane(new_p,l1)
-        assert l1 == [p1,p2,p3,new_p]
-        l2 = []
-        service.adauga_persoane(new_p,l2)
-        assert l2 == [new_p]
-        service.adauga_persoane(p1,l2)
-        assert l2 == [new_p,p1]
-
-def test_sterge_persoane():
-        valid = Validator([],[])
-        service = persoane_service(valid)
-        p1 = persoane("1352","Andrei M","Corbului 13")
-        p2 = persoane("552","Matei","Fabricii 9")
-        p3 = persoane("789","Ana","Cuza 14")
-        p4 = persoane("555","Maria","Cluj?")
-        l1 = [p1,p2,p3,p4]
-        service.sterge_persoane(["","","Ana"],l1)
-        assert l1 == [p1,p2,p4]
-        l2 = [p1,p2,p3,p4]
-        service.sterge_persoane(["","","552"],l2)
-        assert l2 == [p1,p3,p4]
-        service.sterge_persoane(["","","Andrei M"],l2)
-        assert l2 == [p3,p4]
-
-def test_new_person():
-
-
-test_adauga_persoane()
-test_sterge_persoane()
