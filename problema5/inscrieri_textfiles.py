@@ -8,6 +8,7 @@ class inscrieri_textfiles:
         self.repo_persoane = repo_persoane
         self.repo_evenimente = repo_evenimente
         with open("inscrieri.txt",'w') as f:
+            f.write('') #stergem tot continutul din fisier
             f.close()
     
     def inscrie(self, person, eveniment):

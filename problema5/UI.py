@@ -256,9 +256,9 @@ class Console:
                 if len(args) == 1:
                     print("Specificati daca trebuie afisata lista de evenimente sau cea de persoane.")
                 elif args[1] == "persoane":
-                    print_persoane(self.lista_persoane)
+                    print_persoane(self.service_persoane.get_persoane(self.lista_persoane))
                 elif args[1] == "evenimente":
-                    print_evenimente(self.lista_evenimente)
+                    print_evenimente(self.service_evenimente.get_evenimente(self.lista_evenimente))
                 else:
                     print("Specificati daca trebuie afisata lista de evenimente sau cea de persoane.")
 

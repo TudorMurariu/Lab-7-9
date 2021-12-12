@@ -86,6 +86,6 @@ def test_verifica_timp():
     assert valid.verifica_timp("03:08") == True
 
 
-
+test_verifica_inscriere()
 test_verifica_ID()
 test_verifica_timp()

@@ -23,33 +23,63 @@ def generator_descriere():
         nume += " "
     return nume[:-1]
 
-class evenimente_service:
+class evenimente_repo_textfiles:
     def __init__(self,validator):
         self.validator = validator
+        with open("evenimente.txt",'w') as f:
+            f.write('') #stergem tot continutul din fisier
+            f.close()
+
+    def get_evenimente(self, lista_evenimente):
+        lista_evenimente = self.read_evenimente()
+        return lista_evenimente
         
     def adauga_evenimente(self, eveniment, lista_evenimente):
+        lista_evenimente = self.read_evenimente()
         try:
             if not self.validator.verifica_ID_e(eveniment.get_ID()):
                 raise AssertionError("ID incorect !")
             if not self.validator.verifica_timp(eveniment.get_timp()):
                 raise AssertionError("Timp incorect !")
-            lista_evenimente.append(eveniment)
+            with open("evenimente.txt",'w') as f:
+                for el in lista_evenimente:
+                    f.write(str(el) + '\n')
+                f.write(str(eveniment) + '\n')
+                f.close()
         except AssertionError as e:
             print(e)
 
+    def read_evenimente(self):
+        lista_raspuns = []
+        with open("evenimente.txt",'r') as f:
+            for line in f:
+                line = line.replace('(','')
+                line = line.replace(')','')
+                line = line.replace('\n','')
+                properties = line.split(', ')
+                lista_raspuns.append(evenimente(properties[0],properties[1],properties[2],properties[3]))
+            f.close()
+        return lista_raspuns
+
     def sterge_evenimente(self, args, lista_evenimente):
+        lista_evenimente = self.read_evenimente()
         poz = -1
         try:
             poz = int(args[2])
             for i in range(len(lista_evenimente)):
                 if lista_evenimente[i].get_ID() == args[2]:
                     del lista_evenimente[i]
+                    with open("evenimente.txt",'w') as f:
+                        for el in lista_evenimente:
+                            f.write(str(el) + '\n')
+                        f.close()
                     return
             print("Nu exista un eveniment cu acest ID.")
         except:
             print("Trebuie sa introduceti ID-ul evenimentului pe care vreti sa il stergeti.")
 
     def modifica_evenimente(self, args, lista_evenimente):
+        lista_evenimente = self.read_evenimente()
         poz = -1
         try:
             poz = int(args[2])
@@ -64,6 +94,10 @@ class evenimente_service:
                     lista_evenimente[i].set_data(new_eveniment.get_data())
                     lista_evenimente[i].set_timp(new_eveniment.get_timp())
                     lista_evenimente[i].set_descriere(new_eveniment.get_descriere())
+                    with open("evenimente.txt",'w') as f:
+                        for el in lista_evenimente:
+                            f.write(str(el) + '\n')
+                        f.close()
                     return
             print("Nu exista un eveniment cu acest ID.")
         except:
@@ -119,38 +153,3 @@ class evenimente_service:
         descriere = generator_descriere()
 
         return evenimente(ID, data, timp, descriere)
-
-
-
-
-def test_adauga_evenimente():
-        valid = Validator([],[])
-        service = evenimente_service(valid)
-        e1 = evenimente("7335","12 sep","12:33","DESCRIERE")
-        e2 = evenimente("7777","20 oct","14:50","DESCRIERE")
-        e3 = evenimente("990","15 ian","09:55","DESCRIERE")
-        l1 = [e1,e2,e3]
-        new_e = evenimente("111","1 iul","00:00","NEW")
-        service.adauga_evenimente(new_e,l1)
-        assert l1 == [e1,e2,e3,new_e]
-        l2 = [e3,e2,e1]
-        service.adauga_evenimente(new_e,l2)
-        assert l2 == [e3,e2,e1,new_e]
-
-def test_sterge_evenimente():
-        valid = Validator([],[]) 
-        service = evenimente_service(valid)
-        e1 = evenimente("7335","12 sep","12:33","DESCRIERE")
-        e2 = evenimente("7777","20 oct","14:50","DESCRIERE")
-        e3 = evenimente("990","15 ian","09:55","DESCRIERE")
-        e4 = evenimente("100","3 feb","11:00","Descriere")
-        l1 = [e1,e2,e3,e4]
-        service.sterge_evenimente(["","","990"],l1)
-        assert l1 == [e1,e2,e4]
-        l2 = [e3,e4,e1]
-        service.sterge_evenimente(["","","990"],l2)
-        assert l2 == [e4,e1]
-
-test_adauga_evenimente()
-test_sterge_evenimente()
-
