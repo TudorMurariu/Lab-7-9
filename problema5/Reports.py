@@ -3,7 +3,7 @@ from evenimente import evenimente
 from repo_persoane import persoane_repository
 from repo_evenimente import eveniment_repository
 from inscrieri import inscrieri
-
+from Sortari.sortari import sort_aux
 
 class rapoarte:
     def __init__(self, lista_persoane, lista_evenimente, inscrieri):
@@ -23,8 +23,8 @@ class rapoarte:
         for el in self.lista_evenimente:
             if len(self.inscrieri.getPersoane(el)) == 1:
                 lista_raspuns.append(el)
-
-        lista_raspuns.sort()
+        if len(lista_raspuns) > 0:
+            lista_raspuns = sort_aux(lista_raspuns)
 
         return lista_raspuns
 
@@ -45,13 +45,13 @@ class rapoarte:
         if numar_evenimente < 1:
             numar_evenimente = 1
         lista_raspuns = self.lista_evenimente[:]
-        lista_raspuns.sort(key=self.numar_persoane,reverse=True)
+        lista_raspuns = sort_aux(lista_raspuns, self.numar_persoane, reversed=True)
         return lista_raspuns[0:numar_evenimente] # <= 20% 
 
     def top_cele_3_evenimente(self):
         try:
             lista_raspuns = self.lista_evenimente.copy()
-            lista_raspuns.sort(key=self.numar_persoane,reverse=True)
+            lista_raspuns = sort_aux(lista_raspuns, self.numar_persoane, reversed=True)
             
             return lista_raspuns[0:3] # primele 3
         except:

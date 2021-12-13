@@ -109,7 +109,7 @@ class Console:
         print("Populated event and person lists.")
 
     def show_reports(self):
-        try:
+        #try:
             r1 = self.raport.evenimente_cu_o_singura_persoana()
             r2 = self.raport.persoanele_cu_cele_mai_multe_evenimente()
             r3 = self.raport.primele_evenimente_cu_cei_mai_multi_participanti()
@@ -139,8 +139,8 @@ class Console:
                     print(el , len(self.inscrieri.getPersoane(el)))
             else:
                 print("Nu exista 3 evenimente")
-        except:
-            print("Nu exista rapoarte")
+        #except:
+            #print("Nu exista rapoarte")
     
 
     def Interfata(self):
@@ -222,8 +222,8 @@ class Console:
                 if not self.validator.isID(ID_eveniment):
                     print("ID eveniment incorect!")
                     continue
-                persoanaCautata = self.repo_persoane.cauta_persoana(["", "", nume_ID_persoana], self.lista_persoane)
-                evenimentCautat = self.repo_evenimente.cauta_eveniment(["", "",ID_eveniment], self.lista_evenimente)
+                persoanaCautata = self.repo_persoane.cauta_persoana(["", "", nume_ID_persoana], self.service_persoane.get_persoane(self.lista_persoane))
+                evenimentCautat = self.repo_evenimente.cauta_eveniment(["", "",ID_eveniment], self.service_evenimente.get_evenimente(self.lista_evenimente))
                 if persoanaCautata == None or evenimentCautat == None:
                     continue
                 #self.repo_persoane.add_eveniment(persoanaCautata, evenimentCautat)
